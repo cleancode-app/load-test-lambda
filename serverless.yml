@@ -1,0 +1,31 @@
+service: load-test-lambda
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: prod
+  region: ap-southeast-2
+  ecr:
+    images:
+      load-test-image:
+        path: ./
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    ignoreJWTSignature: true
+    noPrependStageInUrl: true
+    httpPort: 4001
+    lambdaPort: 4002
+
+functions:
+  load-test:
+    image:
+      name: load-test-image
+    events:
+      - httpApi:
+          path: /
+          method: post

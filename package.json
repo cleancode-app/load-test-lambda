@@ -1,0 +1,28 @@
+{
+  "name": "load-test-lambda",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild handler.js --bundle --minify --platform=node --target=node14 --outfile=bundle.js",
+    "typescript-compile": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cleancode-app/load-test-lambda.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cleancode-app/load-test-lambda/issues"
+  },
+  "homepage": "https://github.com/cleancode-app/load-test-lambda#readme",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.106",
+    "@types/node": "^18.8.3",
+    "aws-sdk": "^2.1230.0",
+    "esbuild": "^0.15.10",
+    "serverless": "^3.22.0",
+    "serverless-offline": "^11.0.3",
+    "typescript": "^4.8.4"
+  }
+}
