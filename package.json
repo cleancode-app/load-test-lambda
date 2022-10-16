@@ -4,7 +4,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-load-test": "esbuild handler-load-test.js --bundle --minify --platform=node --target=node14 --outfile=bundle.js --external:aws-sdk",
-    "typescript-compile": "tsc"
+    "typescript-compile": "tsc",
+    "deploy": "sls deploy"
   },
   "repository": {
     "type": "git",

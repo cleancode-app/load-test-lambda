@@ -30,4 +30,7 @@ jobs:
       - name: Serverless Deploy
         env:
           EFFORTLESSPT_LOAD_TEST_API_KEY: ${{ secrets.EFFORTLESSPT_LOAD_TEST_API_KEY}}
-        run: npm run deploy
+        run: |
+          npm run typescript-compile
+          npm run build-load-test
+          npm run deploy
