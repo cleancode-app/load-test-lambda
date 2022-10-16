@@ -10,6 +10,7 @@ interface Options {
 
 export async function handler(event: any, context: Context) {
     console.log("Running load test");
+    console.log(event.payload);
     // Get the payload passed to the invoke statement.
     const options: Options = JSON.parse(event.payload);
     if (!options.url) {

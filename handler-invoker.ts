@@ -3,7 +3,7 @@ import { S3 } from "aws-sdk";
 import Lambda from "aws-sdk/clients/lambda";
 import crypto from "crypto";
 
-export function handler(event: APIGatewayProxyEventV2, context: Context) {
+export async function handler(event: APIGatewayProxyEventV2, context: Context) {
     const reportFile = crypto.randomUUID() + ".html";
     console.log("Running load test", reportFile);
     const payload = {
@@ -19,10 +19,10 @@ export function handler(event: APIGatewayProxyEventV2, context: Context) {
         FunctionName: functionName,
         // Don't wait for it to finish.
         InvocationType: "Event",
-        Payload: JSON.stringify({ payload }),
+        Payload: JSON.stringify(JSON.stringify({ payload })),
     };
     console.log("Invoking...");
-    lambda.invoke(invokationParams).promise();
+    await lambda.invoke(invokationParams).promise();
     console.log("Invoked");
     const bucket = process.env.BUCKET_NAME;
     if (!bucket) {
@@ -38,6 +38,9 @@ export function handler(event: APIGatewayProxyEventV2, context: Context) {
     console.log(url);
     return {
         statusCode: 200,
+        Headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({ url, expectedDuration: 180 }), // The load test takes just under three minutes.
     };
 }
