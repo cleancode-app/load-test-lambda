@@ -8,11 +8,11 @@ interface Options {
     uploadPath: string;
 }
 
-export async function handler(event: any, context: Context) {
+export async function handler(event: { payload: Options }, context: Context) {
     console.log("Running load test");
     console.log(event.payload);
     // Get the payload passed to the invoke statement.
-    const options: Options = JSON.parse(event.payload);
+    const options: Options = event.payload;
     if (!options.url) {
         throw new Error('URL not specified');
     }
