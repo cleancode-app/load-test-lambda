@@ -39,10 +39,11 @@ export async function handler(options: Options, context: Context) {
             });
         });
         console.log("Uploading");
-        const uploadParams = {
+        const uploadParams: S3.Types.PutObjectRequest = {
             Bucket: bucket,
             Key: key,
             Body: readFileSync(`/tmp/${key}`),
+            ContentType: 'text/html',
         };
 
         const upload = await s3.upload(uploadParams).promise();

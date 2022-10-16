@@ -1,8 +1,10 @@
 FROM node:16 as build
 
-COPY *.json handler-load-test.ts ./
+COPY package.json package-lock.json ./
 
 RUN npm ci
+
+COPY handler-load-test.ts tsconfig.json ./
 
 RUN npm run typescript-compile
 
