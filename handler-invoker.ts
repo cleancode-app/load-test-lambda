@@ -3,12 +3,25 @@ import { S3 } from "aws-sdk";
 import Lambda from "aws-sdk/clients/lambda";
 import crypto from "crypto";
 
+const s3 = new S3();
+const bucket = process.env.BUCKET_NAME;
+
 export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
     const reportFile = crypto.randomUUID() + ".html";
     console.log("Running load test", reportFile);
+    if (!bucket) {
+        throw new Error("Bucket name not specified (in environment variables");
+    }
+    const presignedURLParams = {
+        Bucket: bucket,
+        Key: reportFile,
+        Expires: 600,
+    };
+    const url = s3.getSignedUrl('getObject', presignedURLParams);
     const payload = {
         url: event.queryStringParameters?.url,
         uploadPath: reportFile,
+        presignedUrl: url,
     };
     const functionName = process.env.FUNCTION_NAME;
     if (!functionName) {
@@ -24,17 +37,6 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     console.log("Invoking...");
     await lambda.invoke(invokationParams).promise();
     console.log("Invoked");
-    const bucket = process.env.BUCKET_NAME;
-    if (!bucket) {
-        throw new Error("Bucket name not specified (in environment variables");
-    }
-    const s3 = new S3();
-    const presignedURLParams = {
-        Bucket: bucket,
-        Key: reportFile,
-        Expires: 600,
-    };
-    const url = s3.getSignedUrl('getObject', presignedURLParams);
     console.log(url);
     return {
         statusCode: 200,
