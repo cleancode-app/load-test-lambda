@@ -45,14 +45,13 @@ custom:
     httpPort: 4001
     lambdaPort: 4002
   customDomain:
-    http:
-      domainName: ${env:LOAD_TEST_API_ORIGIN_DOMAIN, 'api-ap-southeast-2-load-test.cleancode.app'}
-      basePath: ${env:LOAD_TEST_API_ORIGIN_PATH, 'api'}
-      stage: ${sls:stage}
-      createRoute53Record: true
-      endpointType: 'regional'
-      certificateName: '*.cleancode.app'
-      securityPolicy: tls_1_2
+    domainName: ${env:LOAD_TEST_API_ORIGIN_DOMAIN, 'api-ap-southeast-2-load-test.cleancode.app'}
+    basePath: ${env:LOAD_TEST_API_ORIGIN_PATH, 'api'}
+    stage: ${sls:stage}
+    createRoute53Record: true
+    endpointType: 'regional'
+    certificateName: '*.cleancode.app'
+    securityPolicy: tls_1_2
 
 functions:
   invoker:
