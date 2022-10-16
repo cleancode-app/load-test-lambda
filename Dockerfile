@@ -1,17 +1,18 @@
-FROM node:14 as build
+FROM node:16 as build
 
-COPY *.json *.ts ./
+COPY *.json handler-load-test.ts ./
 
 RUN npm ci
 
 RUN npm run typescript-compile
 
-RUN npm run build
+RUN npm run build-load-test
 
-FROM public.ecr.aws/lambda/nodejs:14
-
-COPY --from=build bundle.js ${LAMBDA_RUNTIME_DIR}/bundle.js
+FROM public.ecr.aws/lambda/nodejs:16
 
 RUN yum install -y https://dl.k6.io/rpm/repo.rpm && yum install -y k6 --nogpgcheck && yum clean all
+
+COPY --from=build bundle.js ${LAMBDA_TASK_ROOT}
+COPY k6.js ${LAMBDA_TASK_ROOT}
 
 CMD ["bundle.handler"]

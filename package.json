@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild handler.js --bundle --minify --platform=node --target=node14 --outfile=bundle.js",
+    "build-load-test": "esbuild handler-load-test.js --bundle --minify --platform=node --target=node14 --outfile=bundle.js --external:aws-sdk",
     "typescript-compile": "tsc"
   },
   "repository": {
@@ -17,11 +17,15 @@
   },
   "homepage": "https://github.com/cleancode-app/load-test-lambda#readme",
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.186.0",
+    "@aws-sdk/s3-request-presigner": "^3.186.0",
     "@types/aws-lambda": "^8.10.106",
     "@types/node": "^18.8.3",
     "aws-sdk": "^2.1230.0",
     "esbuild": "^0.15.10",
     "serverless": "^3.22.0",
+    "serverless-domain-manager": "^6.1.0",
+    "serverless-esbuild": "^1.33.0",
     "serverless-offline": "^11.0.3",
     "typescript": "^4.8.4"
   }

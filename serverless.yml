@@ -6,26 +6,59 @@ provider:
   runtime: nodejs14.x
   stage: prod
   region: ap-southeast-2
+  environment:
+    FUNCTION_NAME: load-test-lambda-prod-load-test
+    BUCKET_NAME: load-test-lambda-prod-ap-southeast-2
   ecr:
     images:
       load-test-image:
         path: ./
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "s3:PutObject"
+            - "s3:GetObject"
+            - "s3:Describe*"
+          Resource: 'arn:aws:s3:::load-test-lambda*'
+        - Effect: Allow
+          Action:
+            - "lambda:InvokeFunction"
+          Resource: 'arn:aws:lambda:*:*:function:load-test-lambda*'
 
 plugins:
+  - serverless-esbuild
   - serverless-offline
+  - serverless-domain-manager
 
 custom:
+  esbuild:
+    minify: true
   serverless-offline:
     ignoreJWTSignature: true
     noPrependStageInUrl: true
     httpPort: 4001
     lambdaPort: 4002
+  customDomain:
+    http:
+      domainName: ${env:LOAD_TEST_API_ORIGIN_DOMAIN, 'api-ap-southeast-2-load-test.cleancode.app'}
+      basePath: ${env:LOAD_TEST_API_ORIGIN_PATH, 'api'}
+      stage: ${sls:stage}
+      createRoute53Record: true
+      endpointType: 'regional'
+      certificateName: '*.cleancode.app'
+      securityPolicy: tls_1_2
 
 functions:
+  invoker:
+    handler: handler-invoker.handler
+    timeout: 5
+    events:
+      - httpApi:
+          path: "/run"
+          method: post
   load-test:
     image:
       name: load-test-image
-    events:
-      - httpApi:
-          path: /
-          method: post
+    timeout: 200
