@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent, APIGatewayProxyEventV2, Context } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import { S3 } from "aws-sdk";
 import Lambda from "aws-sdk/clients/lambda";
 import crypto from "crypto";
 
-export async function handler(event: APIGatewayProxyEvent, context: Context) {
+export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
     const reportFile = crypto.randomUUID() + ".html";
     console.log("Running load test", reportFile);
     const payload = {
@@ -38,7 +38,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context) {
     console.log(url);
     return {
         statusCode: 200,
-        Headers: {
+        headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ url, expectedDuration: 180 }), // The load test takes just under three minutes.

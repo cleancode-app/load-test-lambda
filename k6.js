@@ -4,17 +4,8 @@ import {htmlReport} from "https://raw.githubusercontent.com/benc-uk/k6-reporter/
 
 export let options = {
     stages: [
-        {duration: "5s", target: 5},
-        {duration: "5s", target: 10},
-        {duration: "5s", target: 15},
-        {duration: "5s", target: 20},
         {duration: "5s", target: 25},
-        {duration: "5s", target: 30},
-        {duration: "5s", target: 35},
-        {duration: "5s", target: 40},
-        {duration: "5s", target: 45},
-        {duration: "5s", target: 50},
-        {duration: "60s", target: 50},
+        {duration: "60s", target: 25},
         {duration: "60s", target: 0}
     ]
 };
