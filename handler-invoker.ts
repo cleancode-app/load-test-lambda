@@ -1,9 +1,9 @@
-import { APIGatewayProxyEventV2, Context } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyEventV2, Context } from "aws-lambda";
 import { S3 } from "aws-sdk";
 import Lambda from "aws-sdk/clients/lambda";
 import crypto from "crypto";
 
-export async function handler(event: APIGatewayProxyEventV2, context: Context) {
+export async function handler(event: APIGatewayProxyEvent, context: Context) {
     const reportFile = crypto.randomUUID() + ".html";
     console.log("Running load test", reportFile);
     const payload = {

@@ -6,6 +6,10 @@ provider:
   runtime: nodejs16.x
   stage: prod
   region: ap-southeast-2
+  apiGateway:
+    apiKeys:
+      - name: effortlesspt
+        value: ${env:EFFORTLESSPT_LOAD_TEST_API_KEY}
   environment:
     FUNCTION_NAME: load-test-lambda-prod-load-test
     BUCKET_NAME: load-test-lambda-prod-ap-southeast-2
@@ -55,9 +59,10 @@ functions:
     handler: handler-invoker.handler
     timeout: 5
     events:
-      - httpApi:
+      - http:
           path: "/run"
           method: post
+          private: true
   load-test:
     image:
       name: load-test-image
