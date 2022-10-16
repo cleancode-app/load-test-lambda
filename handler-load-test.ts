@@ -6,7 +6,7 @@ import { fstat, readFileSync } from 'fs';
 interface Options {
     url: string;
     uploadPath: string;
-    presignedUrl: string;
+    objectUrl: string;
 }
 
 const sns = new SNS();
@@ -20,7 +20,7 @@ export async function handler(options: Options, context: Context) {
         if (!options.uploadPath) {
             throw new Error('Upload path not specified');
         }
-        if (!options.presignedUrl) {
+        if (!options.objectUrl) {
             throw new Error('Presigned URL not specified');
         }
         console.log("Input is valid");
@@ -55,7 +55,7 @@ export async function handler(options: Options, context: Context) {
         const upload = await s3.upload(uploadParams).promise();
         console.log(`Upload complete: ${upload.Location}`);
         // Send an SNS message.
-        await sns.publish({ TopicArn: 'arn:aws:sns:ap-southeast-2:204244381428:effortlesspt-alerts', Message: `Just completed a load test! View the results at ${options.presignedUrl}` }, (err, data) => {
+        await sns.publish({ TopicArn: 'arn:aws:sns:ap-southeast-2:204244381428:effortlesspt-alerts', Message: `Just completed a load test! View the results at ${options.objectUrl}` }, (err, data) => {
             if (err) {
                 console.error(err);
             } else {

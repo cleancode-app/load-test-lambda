@@ -12,16 +12,11 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     if (!bucket) {
         throw new Error("Bucket name not specified (in environment variables");
     }
-    const presignedURLParams = {
-        Bucket: bucket,
-        Key: reportFile,
-        Expires: 600,
-    };
-    const url = s3.getSignedUrl('getObject', presignedURLParams);
+    const objectUrl = `https://load-test.cleancode.app/${reportFile}`;
     const payload = {
         url: event.queryStringParameters?.url,
         uploadPath: reportFile,
-        presignedUrl: url,
+        objectUrl,
     };
     const functionName = process.env.FUNCTION_NAME;
     if (!functionName) {
@@ -37,12 +32,12 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     console.log("Invoking...");
     await lambda.invoke(invokationParams).promise();
     console.log("Invoked");
-    console.log(url);
+    console.log(objectUrl);
     return {
         statusCode: 200,
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url, expectedDuration: 180 }), // The load test takes just under three minutes.
+        body: JSON.stringify({ url: objectUrl, expectedDuration: 180 }), // The load test takes just under three minutes.
     };
 }
