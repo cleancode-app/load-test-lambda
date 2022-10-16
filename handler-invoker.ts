@@ -19,7 +19,7 @@ export async function handler(event: APIGatewayProxyEventV2, context: Context) {
         FunctionName: functionName,
         // Don't wait for it to finish.
         InvocationType: "Event",
-        payload: JSON.stringify(payload),
+        Payload: JSON.stringify(payload),
     };
     console.log("Invoking...");
     await lambda.invoke(invokationParams).promise();
