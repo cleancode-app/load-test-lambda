@@ -18,7 +18,7 @@ export let options = {
 export function handleSummary(data) {
     return {
         [__ENV.FILE]: htmlReport(data, {
-            title: `CleanCode Load Test ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 
+            title: `CleanCode Load Test ${new Date().toLocaleDateString('en-AU')} ${new Date().toLocaleTimeString('en-AU')}`, 
             url: __ENV.URL
         }),
     };
